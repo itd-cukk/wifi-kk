@@ -7,87 +7,176 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,sans-serif;background:#FAF7F2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-.card{background:#fff;border-radius:16px;padding:32px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.1)}
-.logo{width:180px;margin:0 auto 16px}
-.logo img{width:100%}
-.spinner{width:40px;height:40px;border:3px solid #E5E3DE;border-top-color:#C8272D;border-radius:50%;animation:spin 0.8s linear infinite;margin:16px auto}
+.card{background:#fff;border-radius:16px;padding:28px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.1)}
+.brand{margin-bottom:20px}
+.brand-keling{color:#C8272D;font-size:28px;font-weight:800;font-family:system-ui}
+.brand-kumang{color:#1E3A8A;font-size:28px;font-weight:800;font-family:system-ui}
+.brand-sub{color:#0F6B3C;font-size:11px;font-weight:500;letter-spacing:1px;margin-top:2px}
+.accent{height:3px;background:linear-gradient(90deg,#C8272D,#1E3A8A,#0F6B3C);border-radius:2px;margin:0 auto 20px;width:80px}
+
+/* Steps */
+.step{display:none}
+.step.active{display:block}
+
+/* Step 1 - Connecting */
+.spinner{width:48px;height:48px;border:3px solid #E5E3DE;border-top-color:#C8272D;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px}
 @keyframes spin{to{transform:rotate(360deg)}}
-h2{font-size:18px;color:#3D3B35;margin-bottom:8px}
-p{font-size:13px;color:#9A9890;line-height:1.5}
-.ssid{font-weight:600;color:#1E3A8A;margin-top:8px;font-size:14px}
-.err{display:none;background:#FFF0F0;border:1px solid rgba(200,39,45,.3);border-radius:8px;padding:12px;margin-top:16px;font-size:13px;color:#9B1C21}
-.err.show{display:block}
-.btn-manual{display:none;margin-top:16px;width:100%;padding:12px;background:#C8272D;border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
-.btn-manual.show{display:block}
+.step-title{font-size:18px;font-weight:700;color:#3D3B35;margin-bottom:8px}
+.step-desc{font-size:13px;color:#9A9890;line-height:1.5;margin-bottom:8px}
+.ssid-badge{display:inline-flex;align-items:center;gap:6px;background:#EEF4FF;border:1px solid rgba(30,58,138,.2);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;color:#1E3A8A;margin-top:4px}
+
+/* Step 2 - Manual button */
+.btn-login{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#C8272D,#9B1C21);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:16px;text-decoration:none;text-align:center}
+.btn-login:active{opacity:.9}
+.warn-box{background:#FFF8E1;border:1px solid rgba(180,120,0,.2);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:#7B5800;line-height:1.5;text-align:left}
+.warn-box strong{display:block;margin-bottom:3px}
+
+/* Step 3 - Success */
+.success-ico{font-size:52px;margin-bottom:12px}
+.success-title{font-size:20px;font-weight:700;color:#0F6B3C;margin-bottom:6px}
+.success-desc{font-size:13px;color:#9A9890;line-height:1.5}
+
+/* Step 4 - Error */
+.error-ico{font-size:40px;margin-bottom:12px}
+.error-title{font-size:16px;font-weight:700;color:#9B1C21;margin-bottom:8px}
+.error-desc{font-size:12px;color:#9A9890;line-height:1.5;margin-bottom:16px}
+.btn-retry{display:block;width:100%;padding:12px;background:#1E3A8A;border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:8px}
+.btn-copy{display:block;width:100%;padding:12px;background:transparent;border:1.5px solid #E5E3DE;border-radius:10px;color:#5C5A54;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
+
+.footer{margin-top:20px;font-size:10px;color:#9A9890;letter-spacing:.5px}
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="logo">
-    <svg viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
-      <text x="10" y="55" font-family="Arial" font-weight="bold" font-size="42" fill="#C8272D">Keling</text>
-      <text x="155" y="55" font-family="Arial" font-weight="bold" font-size="42" fill="#1E3A8A">Kumang</text>
-      <text x="10" y="75" font-family="Arial" font-size="14" fill="#0F6B3C">Member-TBL-Entrepreneur</text>
-    </svg>
+  <div class="brand">
+    <span class="brand-keling">Keling</span><span class="brand-kumang">Kumang</span>
+    <div class="brand-sub">MEMBER &middot; TBL &middot; ENTREPRENEUR</div>
   </div>
-  <div class="spinner" id="spinner"></div>
-  <h2 id="title">Menghubungkan ke WiFi...</h2>
-  <p id="desc">Sedang memproses akses internet Anda.</p>
-  <p class="ssid" id="ssidLabel"></p>
-  <div class="err" id="errBox">
-    Tidak dapat terhubung otomatis. Pastikan Anda sudah konek ke WiFi hotspot, lalu coba lagi.
+  <div class="accent"></div>
+
+  <!-- Step 1: Connecting -->
+  <div class="step active" id="step1">
+    <div class="spinner"></div>
+    <div class="step-title">Menghubungkan...</div>
+    <div class="step-desc">Sedang memproses akses internet Anda</div>
+    <div class="ssid-badge">&#128246; <span id="ssidLabel1">WiFi Hotspot</span></div>
   </div>
-  <button class="btn-manual" id="btnManual" type="button">Coba Login Manual</button>
+
+  <!-- Step 2: Tap to login -->
+  <div class="step" id="step2">
+    <div style="font-size:40px;margin-bottom:12px">&#128246;</div>
+    <div class="step-title">Satu langkah lagi</div>
+    <div class="step-desc">Pastikan HP sudah konek ke WiFi</div>
+    <div class="ssid-badge" style="margin-bottom:16px">&#128246; <span id="ssidLabel2">WiFi Hotspot</span></div>
+    <div class="warn-box">
+      <strong>&#9888; Perlu konfirmasi</strong>
+      Tap tombol di bawah untuk menyelesaikan login ke internet.
+    </div>
+    <a id="btnLogin" class="btn-login" href="#">&#9889; Login ke Internet Sekarang</a>
+  </div>
+
+  <!-- Step 3: Success -->
+  <div class="step" id="step3">
+    <div class="success-ico">&#10004;&#65039;</div>
+    <div class="success-title">Terhubung!</div>
+    <div class="success-desc">Anda sudah terhubung ke internet.<br>Selamat menikmati!</div>
+  </div>
+
+  <!-- Step 4: Error -->
+  <div class="step" id="step4">
+    <div class="error-ico">&#128683;</div>
+    <div class="error-title">Gagal terhubung</div>
+    <div class="error-desc" id="errorDesc">Pastikan HP sudah konek ke WiFi hotspot lalu coba lagi.</div>
+    <button class="btn-retry" id="btnRetry">&#8635; Coba Lagi</button>
+    <button class="btn-copy" id="btnCopy">&#128203; Salin Kode Manual</button>
+  </div>
+
+  <div class="footer">CU Keling Kumang &copy; 2026</div>
 </div>
 
 <script>
-// Parse URL params
 function getParam(name) {
-  var url = new URL(window.location.href);
-  return url.searchParams.get(name) || '';
+  return new URLSearchParams(window.location.search).get(name) || '';
 }
 
 var u    = getParam('u');
-var p    = getParam('p') || u;  // password = username jika tidak ada
-var ip   = getParam('ip') || '10.20.30.1';
-var ssid = getParam('s') || 'RYUJI HOME';
+var p    = getParam('p') || u;
+var ip   = getParam('ip') || '10.10.10.1';
+var ssid = getParam('s') || 'WiFi Hotspot';
+var loginUrl = 'http://' + ip + '/login?username=' + encodeURIComponent(u) + '&password=' + encodeURIComponent(p);
 
-document.getElementById('ssidLabel').textContent = ssid;
+// Set SSID labels
+document.getElementById('ssidLabel1').textContent = ssid;
+document.getElementById('ssidLabel2').textContent = ssid;
+
+// Set login button href
+document.getElementById('btnLogin').href = loginUrl;
+
+function showStep(n) {
+  document.querySelectorAll('.step').forEach(function(el) { el.classList.remove('active'); });
+  document.getElementById('step' + n).classList.add('active');
+}
 
 if (!u) {
-  document.getElementById('title').textContent = 'QR tidak valid';
-  document.getElementById('desc').textContent = 'Parameter login tidak ditemukan. Minta kartu voucher baru.';
-  document.getElementById('spinner').style.display = 'none';
+  showStep(4);
+  document.getElementById('errorDesc').textContent = 'QR tidak valid — parameter login tidak ditemukan.';
 } else {
-  // Build login URL
-  var loginUrl = 'http://' + ip + '/login?username=' + encodeURIComponent(u) + '&password=' + encodeURIComponent(p);
-
-  // Try redirect after short delay (let page render first)
+  // Try silent login via fetch first (check if hotspot responds)
   setTimeout(function() {
-    // Method 1: iframe hidden load (tidak interrupt UX)
-    var iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    iframe.src = loginUrl;
-    document.body.appendChild(iframe);
+    // Try to reach hotspot IP
+    var controller = new AbortController();
+    var timeout = setTimeout(function() { controller.abort(); }, 3000);
 
-    // Method 2: Direct redirect setelah 1.5 detik
+    fetch('http://' + ip + '/login', {
+      method: 'HEAD',
+      signal: controller.signal,
+      mode: 'no-cors'
+    }).then(function() {
+      clearTimeout(timeout);
+      // Hotspot reachable — go to step 2 (tap to login)
+      showStep(2);
+    }).catch(function(err) {
+      clearTimeout(timeout);
+      if (err.name === 'AbortError') {
+        // Timeout — hotspot not reachable
+        showStep(4);
+        document.getElementById('errorDesc').textContent =
+          'Tidak dapat menjangkau hotspot (' + ip + '). Pastikan HP sudah konek ke WiFi ' + ssid + ' lalu scan ulang.';
+      } else {
+        // Network error but hotspot might be reachable (CORS block = reachable!)
+        showStep(2);
+      }
+    });
+  }, 1000);
+
+  // Login button click
+  document.getElementById('btnLogin').addEventListener('click', function(e) {
+    e.preventDefault();
+    showStep(1);
+    document.querySelector('#step1 .step-title').textContent = 'Login...';
+
+    // Try login
     setTimeout(function() {
       window.location.href = loginUrl;
-    }, 1500);
+    }, 500);
+  });
 
-    // Fallback: tampilkan tombol manual setelah 5 detik
-    setTimeout(function() {
-      document.getElementById('spinner').style.display = 'none';
-      document.getElementById('title').textContent = 'Tap tombol di bawah';
-      document.getElementById('desc').textContent = 'Pastikan Anda sudah konek ke WiFi ' + ssid;
-      document.getElementById('errBox').classList.add('show');
-      document.getElementById('btnManual').classList.add('show');
-    }, 5000);
+  // Retry
+  document.getElementById('btnRetry').addEventListener('click', function() {
+    showStep(1);
+    document.querySelector('#step1 .step-title').textContent = 'Menghubungkan...';
+    setTimeout(function() { window.location.reload(); }, 500);
+  });
 
-  }, 800);
-
-  document.getElementById('btnManual').addEventListener('click', function() {
-    window.location.href = loginUrl;
+  // Copy code
+  document.getElementById('btnCopy').addEventListener('click', function() {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(u).then(function() {
+        document.getElementById('btnCopy').textContent = '&#10003; Kode tersalin: ' + u;
+      });
+    } else {
+      alert('Kode manual: ' + u);
+    }
   });
 }
 </script>
