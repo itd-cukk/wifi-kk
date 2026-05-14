@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CU Keling Kumang — WiFi Login</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#FAF7F2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#fff;border-radius:16px;padding:32px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.1)}
+.logo{width:180px;margin:0 auto 16px}
+.logo img{width:100%}
+.spinner{width:40px;height:40px;border:3px solid #E5E3DE;border-top-color:#C8272D;border-radius:50%;animation:spin 0.8s linear infinite;margin:16px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+h2{font-size:18px;color:#3D3B35;margin-bottom:8px}
+p{font-size:13px;color:#9A9890;line-height:1.5}
+.ssid{font-weight:600;color:#1E3A8A;margin-top:8px;font-size:14px}
+.err{display:none;background:#FFF0F0;border:1px solid rgba(200,39,45,.3);border-radius:8px;padding:12px;margin-top:16px;font-size:13px;color:#9B1C21}
+.err.show{display:block}
+.btn-manual{display:none;margin-top:16px;width:100%;padding:12px;background:#C8272D;border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-manual.show{display:block}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <svg viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+      <text x="10" y="55" font-family="Arial" font-weight="bold" font-size="42" fill="#C8272D">Keling</text>
+      <text x="155" y="55" font-family="Arial" font-weight="bold" font-size="42" fill="#1E3A8A">Kumang</text>
+      <text x="10" y="75" font-family="Arial" font-size="14" fill="#0F6B3C">Member-TBL-Entrepreneur</text>
+    </svg>
+  </div>
+  <div class="spinner" id="spinner"></div>
+  <h2 id="title">Menghubungkan ke WiFi...</h2>
+  <p id="desc">Sedang memproses akses internet Anda.</p>
+  <p class="ssid" id="ssidLabel"></p>
+  <div class="err" id="errBox">
+    Tidak dapat terhubung otomatis. Pastikan Anda sudah konek ke WiFi hotspot, lalu coba lagi.
+  </div>
+  <button class="btn-manual" id="btnManual" type="button">Coba Login Manual</button>
+</div>
+
+<script>
+// Parse URL params
+function getParam(name) {
+  var url = new URL(window.location.href);
+  return url.searchParams.get(name) || '';
+}
+
+var u    = getParam('u');
+var p    = getParam('p') || u;  // password = username jika tidak ada
+var ip   = getParam('ip') || '10.10.10.1';
+var ssid = getParam('s') || 'AULA KELING KUMANG';
+
+document.getElementById('ssidLabel').textContent = ssid;
+
+if (!u) {
+  document.getElementById('title').textContent = 'QR tidak valid';
+  document.getElementById('desc').textContent = 'Parameter login tidak ditemukan. Minta kartu voucher baru.';
+  document.getElementById('spinner').style.display = 'none';
+} else {
+  // Build login URL
+  var loginUrl = 'http://' + ip + '/login?username=' + encodeURIComponent(u) + '&password=' + encodeURIComponent(p);
+
+  // Try redirect after short delay (let page render first)
+  setTimeout(function() {
+    // Method 1: iframe hidden load (tidak interrupt UX)
+    var iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = loginUrl;
+    document.body.appendChild(iframe);
+
+    // Method 2: Direct redirect setelah 1.5 detik
+    setTimeout(function() {
+      window.location.href = loginUrl;
+    }, 1500);
+
+    // Fallback: tampilkan tombol manual setelah 5 detik
+    setTimeout(function() {
+      document.getElementById('spinner').style.display = 'none';
+      document.getElementById('title').textContent = 'Tap tombol di bawah';
+      document.getElementById('desc').textContent = 'Pastikan Anda sudah konek ke WiFi ' + ssid;
+      document.getElementById('errBox').classList.add('show');
+      document.getElementById('btnManual').classList.add('show');
+    }, 5000);
+
+  }, 800);
+
+  document.getElementById('btnManual').addEventListener('click', function() {
+    window.location.href = loginUrl;
+  });
+}
+</script>
+</body>
+</html>
